@@ -1,38 +1,30 @@
 var fdb = new ForerunnerDB();
 var db = fdb.db("school");
+var studentCollection = db.collection("students");
 
 $(document).ready(function() {
 	studentCollection.load(dataLoad);
 	$("#table-tb").on("click",".dataID",colIDClick);
 	$("#table-tb").on("click",".btn-danger",btnDeleteClick);
-	// $("#table-tb").on("click","dataID",colIDClick);
+	$("#btnInsertData").on("click",Alert);
+	$("#table-tb").on("click",".btn-warning",btnEditClick);
+	$("#saveChanges").on("click",saveUpdateData);
+	$("#btnLimitSearch").on("click",limitSearch);
 })
 
-var studentCollection = db.collection("students");
-// var newStudent = {
-    // name: "Koding",
-    // age: 18
-// };
-// studentCollection.insert(newStudent);
-console.log(studentCollection.load());
 function dataLoad() {
-	// console.log("data loaded")
 	console.log(studentCollection.find());
-	// cb();
 	updateTable(studentCollection.find());
 }
 
 function cb() {
-	createData();
-	// update(studentCollection.find());
+	createData()
 }
 function dataSave() {
-	// console.log("data saved");
 	updateTable(studentCollection.find());
 }
 
 function createData() {
-	console.log("create data")
 	for(i = 0;i < 20;i++){
 		studentCollection.insert({
 		name : String.fromCharCode(Math.floor((Math.random()*26) + 65),
@@ -61,7 +53,6 @@ function updateTable(datas) {
 
 function colIDClick() {
 	$("#modal-body").find("p").remove(); 
-	console.log("colIDClick");
 	var ID = $(this).text();
 	var query = {
 	    _id: ID
@@ -75,21 +66,65 @@ function colIDClick() {
 	$("#modal").modal("show");
 }
 
+function Alert() {
+	var name = $("#name").val();
+	var age = $("#age").val();
+	if(name != "undefind" || age !="undefind"){
+		studentCollection.insert({
+			name : name,
+			age : age
+		});
+	}
+	studentCollection.save(dataSave);
+	// alert("Hello," + age + "歲的" + name);
+	$("#name").val("名字");
+	$("#age").val("年齡");
+}	
+
 function btnDeleteClick(){
 	if (confirm("確定要刪除嗎?") == false) {
 		return;
 	}
-	var di = $(this).closest("tr").find(".dataID").text();
+	var ID = $(this).closest("tr").find(".dataID").text();
 	studentCollection.remove({
-	    _id: di
+	    _id: ID
 	});
 	studentCollection.save(dataSave);
 }
 
+function btnEditClick() {
+	var ID = $(this).closest("tr").find(".dataID").text();
+	var query = {
+	    _id: ID
+	};
+	var studentData = studentCollection.find(query);
+	$("#modalAge").val(studentData[0].age);
+	$("#modalName").val(studentData[0].name);
+	$("#editModal").attr("studentID",ID);
+	$("#editModal").modal("show");
+}
 
+function saveUpdateData() {
+	var ID = $("#editModal").attr("studentID");
+	var name = $("#modalName").val();
+	var age = $("#modalAge").val();
+	var newData = {
+	    name: name,
+	    age: age
+	};
+	studentCollection.updateById(ID,newData);
+	$("#editModal").modal("hide");
+	studentCollection.save(dataSave);
+}
 
-
-
-
-
-
+function limitSearch(){
+	var search = studentCollection.find({
+    	age : {
+        	"$gt" : $("#edtGT").val(),
+        	"$lt" : $("#edtLT").val()
+    	}
+	});
+	updateTable(search);
+	$("#edtLT").val("");
+	$("#edtGT").val("");
+}

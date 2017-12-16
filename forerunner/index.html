@@ -9,7 +9,17 @@
 	<title>index.html</title>
 </head>
 <body>
-	<table class = "table table-hover">
+	<label>名字:    </label>
+	<input type="text" value="名字" id = "name"/>
+	<label>年齡:    </label>
+	<input type="text" value="年齡" id= "age"/>
+	<button id="btnInsertData" class="btn btn-info">提交</button><br>
+	<label>年齡 : 大於</label>
+	<input type="text" value="" id = "edtGT"/>
+	<label>小於</label>
+	<input type="text" value="" id= "edtLT"/>
+	<button id="btnLimitSearch" class="btn btn-success">搜尋</button>
+	<table class="table">
         <thead>
             <tr>
             	<td>#</td>
@@ -18,8 +28,10 @@
                 <td>編輯</td>
             </tr>
         </thead>
-        <tbody id="table-tb">
-        <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <tbody id="table-tb"> 
+        </tbody>
+    </table>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -31,13 +43,30 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-            
-        </tbody>
-    </table>
+	</div><!-- /.modal -->
+
+	<div class="modal fade" tabindex="-1" role="dialog" id="editModal" studentID = "">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+	        <h4 class="modal-title">修改學生資料</h4>
+	      </div>
+	      <div class="modal-body">
+	  	    <label>名字:</label><br>
+			<input type="text" value="" id = "modalName"/><br>
+			<label>年齡:</label><br>
+			<input type="text" value="" id = "modalAge"/>
+		  </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 </body>
 </html>
