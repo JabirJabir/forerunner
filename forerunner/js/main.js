@@ -10,6 +10,8 @@ $(document).ready(function() {
 	$("#table-tb").on("click",".btn-warning",btnEditClick);
 	$("#saveChanges").on("click",saveUpdateData);
 	$("#btnLimitSearch").on("click",limitSearch);
+	$("#btnCertainSearch").on("click",certainSearch);
+	
 })
 
 function dataLoad() {
@@ -21,6 +23,7 @@ function cb() {
 	createData()
 }
 function dataSave() {
+	console.log("dataSave");
 	updateTable(studentCollection.find());
 }
 
@@ -118,13 +121,36 @@ function saveUpdateData() {
 }
 
 function limitSearch(){
+	console.log($("#edtGT").val());
+	console.log($("#edtLT").val());
+	var GT = $("#edtGT").val();
+	var LT = $("#edtLT").val();
 	var search = studentCollection.find({
     	age : {
-        	"$gt" : $("#edtGT").val(),
-        	"$lt" : $("#edtLT").val()
+        	"$gt" : GT,
+        	"$lt" : LT
     	}
 	});
 	updateTable(search);
 	$("#edtLT").val("");
 	$("#edtGT").val("");
+}
+
+function certainSearch(){
+	var checkbox = $(".cbAge");
+	var checked = [];
+	for(var i = 0;i < checkbox.length;i++){
+		if(checkbox[i].checked){
+			checked.push(checkbox[i].value*1);
+		}
+	}
+	console.log(checked.length);
+	var query = {
+    	age:{
+        	$in:checked
+    	}
+	}
+	var search = studentCollection.find(query);
+	console.log(search);
+	updateTable(search);
 }
